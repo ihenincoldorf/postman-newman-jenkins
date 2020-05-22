@@ -1,0 +1,110 @@
+{
+	"info": {
+		"_postman_id": "ef31f40b-1dc8-4d2b-a1f7-51e817a34c42",
+		"name": "JSPH.C",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "get all comments",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "00cc829d-96b7-4572-810f-72ba0c9a9272",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"pm.test(\"Content-Type is present\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"});",
+							"",
+							"pm.test(\"Content-Type value\", function () {",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.eql('application/json; charset=utf-8');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{jsonph}}/comments",
+					"host": [
+						"{{jsonph}}"
+					],
+					"path": [
+						"comments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get comments for a single post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6fa4eb65-091e-4d43-b205-0e4f675fe610",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"test correct postId\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    jsonData.map(comment => \r",
+							"    pm.expect(comment.postId).to.be.eql(pm.globals.get(\"postID\")))\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "ed226656-7ea6-4275-9d87-0d4f0a83cb53",
+						"exec": [
+							"pm.globals.set(\"postID\", 2);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{jsonph}}/comments?postId={{postID}}",
+					"host": [
+						"{{jsonph}}"
+					],
+					"path": [
+						"comments"
+					],
+					"query": [
+						{
+							"key": "postId",
+							"value": "{{postID}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
